@@ -6,7 +6,7 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {
     @Column(name = "name")
-    private String name;
+    protected String name;
 
     public String getName() {
         return name;
