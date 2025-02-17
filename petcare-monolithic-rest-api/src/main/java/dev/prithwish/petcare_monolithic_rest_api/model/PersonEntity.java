@@ -1,6 +1,5 @@
-package dev.prithwish.petcare_monolithic_rest_api;
+package dev.prithwish.petcare_monolithic_rest_api.model;
 
-import dev.prithwish.petcare_monolithic_rest_api.model.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
