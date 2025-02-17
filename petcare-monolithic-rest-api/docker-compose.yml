@@ -1,0 +1,13 @@
+services:
+  mysql:
+    image: mysql:9.1
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=petcare
+      - MYSQL_PASSWORD=petcare
+      - MYSQL_DATABASE=petcare
+    volumes:
+      - "./conf.d:/etc/mysql/conf.d:ro"
