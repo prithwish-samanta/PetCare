@@ -1,20 +1,11 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.dto;
 
-public class OwnerDto {
-    private int id;
+public class OwnerReqDto {
     private String lastName;
     private String firstName;
     private String address;
     private String city;
     private String telephone;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getLastName() {
         return lastName;

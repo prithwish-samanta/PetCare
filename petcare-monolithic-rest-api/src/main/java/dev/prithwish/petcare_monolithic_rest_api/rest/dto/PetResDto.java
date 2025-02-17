@@ -2,7 +2,7 @@ package dev.prithwish.petcare_monolithic_rest_api.rest.dto;
 
 import java.time.LocalDate;
 
-public class PetDto {
+public class PetResDto {
     private int id;
     private String name;
     private LocalDate birthDate;
