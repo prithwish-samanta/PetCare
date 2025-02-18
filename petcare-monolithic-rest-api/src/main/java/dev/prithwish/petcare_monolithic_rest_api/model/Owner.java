@@ -50,4 +50,8 @@ public class Owner extends PersonEntity {
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
     }
+
+    public Pet getPet(int petId) {
+        return this.getPets().stream().filter(p -> p.getId() == petId).findFirst().orElse(null);
+    }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class PetReqDto {
     private String name;
     private LocalDate birthDate;
+    private String petType;
 
     public String getName() {
         return name;
@@ -20,5 +21,13 @@ public class PetReqDto {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String getPetType() {
+        return petType;
+    }
+
+    public void setPetType(String petType) {
+        this.petType = petType;
     }
 }

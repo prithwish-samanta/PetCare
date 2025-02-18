@@ -1,5 +1,7 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.dto;
 
+import java.util.Set;
+
 public class OwnerResDto {
     private int id;
     private String lastName;
@@ -7,6 +9,7 @@ public class OwnerResDto {
     private String address;
     private String city;
     private String telephone;
+    private Set<PetResDto> pets;
 
     public int getId() {
         return id;
@@ -54,5 +57,13 @@ public class OwnerResDto {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public Set<PetResDto> getPets() {
+        return pets;
+    }
+
+    public void setPets(Set<PetResDto> pets) {
+        this.pets = pets;
     }
 }

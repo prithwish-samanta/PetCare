@@ -2,6 +2,7 @@ package dev.prithwish.petcare_monolithic_rest_api.service;
 
 import dev.prithwish.petcare_monolithic_rest_api.model.Owner;
 import dev.prithwish.petcare_monolithic_rest_api.model.Pet;
+import dev.prithwish.petcare_monolithic_rest_api.model.PetType;
 import dev.prithwish.petcare_monolithic_rest_api.model.Visit;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ClinicService {
     Pet savePet(Pet pet);
 
     Visit saveVisit(Visit visit);
+
+    PetType findPetTypeByName(String name);
 }

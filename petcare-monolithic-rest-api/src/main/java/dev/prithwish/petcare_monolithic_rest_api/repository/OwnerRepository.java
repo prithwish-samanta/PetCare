@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface OwnerRepository extends JpaRepository<Owner, Integer> {
-    List<Owner> findOwnerByLastNameLikeIgnoreCase(String lastName);
+    List<Owner> findByLastNameLikeIgnoreCase(String lastName);
 }
