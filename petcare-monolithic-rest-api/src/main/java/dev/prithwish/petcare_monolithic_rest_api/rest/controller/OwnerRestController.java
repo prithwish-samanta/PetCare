@@ -1,5 +1,6 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.controller;
 
+import dev.prithwish.petcare_monolithic_rest_api.exception.ResourceNotFoundException;
 import dev.prithwish.petcare_monolithic_rest_api.mapper.OwnerMapper;
 import dev.prithwish.petcare_monolithic_rest_api.mapper.PetMapper;
 import dev.prithwish.petcare_monolithic_rest_api.mapper.VisitMapper;
@@ -9,6 +10,7 @@ import dev.prithwish.petcare_monolithic_rest_api.model.PetType;
 import dev.prithwish.petcare_monolithic_rest_api.model.Visit;
 import dev.prithwish.petcare_monolithic_rest_api.rest.dto.*;
 import dev.prithwish.petcare_monolithic_rest_api.service.ClinicService;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/owners")
 public class OwnerRestController {
     private final ClinicService clinicService;
+    private final MessageSource messageSource;
 
-    public OwnerRestController(ClinicService clinicService) {
+    public OwnerRestController(ClinicService clinicService, MessageSource messageSource) {
         this.clinicService = clinicService;
+        this.messageSource = messageSource;
     }
 
     // Adds a pet owner
@@ -47,7 +52,7 @@ public class OwnerRestController {
             owners = clinicService.findAllOwners();
         }
         if (owners.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.list.empty", null, Locale.ENGLISH));
         }
         List<OwnerResDto> res = owners.stream().map(OwnerMapper::toOwnerDto).toList();
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -58,7 +63,7 @@ public class OwnerRestController {
     public ResponseEntity<OwnerResDto> getOwner(@PathVariable int ownerId) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         OwnerResDto dto = OwnerMapper.toOwnerDto(owner);
         return new ResponseEntity<>(dto, HttpStatus.OK);
@@ -69,7 +74,7 @@ public class OwnerRestController {
     public ResponseEntity<OwnerResDto> updateOwner(@RequestBody OwnerReqDto owner, @PathVariable int ownerId) {
         Owner dbOwner = clinicService.findOwnerById(ownerId);
         if (dbOwner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         if (StringUtils.hasText(owner.getLastName())) {
             dbOwner.setLastName(owner.getLastName());
@@ -95,7 +100,7 @@ public class OwnerRestController {
     public ResponseEntity<Void> deleteOwner(@PathVariable int ownerId) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         clinicService.deleteOwner(ownerId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -106,11 +111,11 @@ public class OwnerRestController {
     public ResponseEntity<PetResDto> addPetToOwner(@PathVariable int ownerId, @RequestBody PetReqDto pet) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         PetType petType = clinicService.findPetTypeByName(pet.getPetType());
         if (petType == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pettype.not.found", null, Locale.ENGLISH));
         }
         Pet petToAdd = PetMapper.toPet(pet);
         petToAdd.setOwner(owner);
@@ -128,11 +133,11 @@ public class OwnerRestController {
     public ResponseEntity<PetResDto> getOwnersPet(@PathVariable int ownerId, @PathVariable int petId) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         Pet res = owner.getPet(petId);
         if (res == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
         }
         return new ResponseEntity<>(PetMapper.toPetDto(res), HttpStatus.OK);
     }
@@ -142,11 +147,11 @@ public class OwnerRestController {
     public ResponseEntity<String> updateOwnersPet(@PathVariable int ownerId, @PathVariable int petId, @RequestBody PetReqDto pet) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         Pet dbPet = owner.getPet(petId);
         if (dbPet == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
         }
         if (StringUtils.hasText(pet.getName())) {
             dbPet.setName(pet.getName());
@@ -157,12 +162,12 @@ public class OwnerRestController {
         if (StringUtils.hasText(pet.getPetType())) {
             PetType petType = clinicService.findPetTypeByName(pet.getPetType());
             if (petType == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                throw new ResourceNotFoundException(messageSource.getMessage("api.error.pettype.not.found", null, Locale.ENGLISH));
             }
             dbPet.setType(petType);
         }
         clinicService.savePet(dbPet);
-        return new ResponseEntity<>("Pet's details updated successfully!", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage("api.response.pet.update.successful", null, Locale.ENGLISH), HttpStatus.OK);
     }
 
     // Adds a vet visit
@@ -170,11 +175,11 @@ public class OwnerRestController {
     public ResponseEntity<VisitResDto> addVisitToOwner(@PathVariable int ownerId, @PathVariable int petId, @RequestBody VisitReqDto visit) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
         }
         Pet pet = owner.getPet(petId);
         if (pet == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
         }
         Visit req = VisitMapper.toVisit(visit);
         req.setPet(pet);
