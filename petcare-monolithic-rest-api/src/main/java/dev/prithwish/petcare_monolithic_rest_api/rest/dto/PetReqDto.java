@@ -1,10 +1,16 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.PastOrPresent;
+
 import java.time.LocalDate;
 
 public class PetReqDto {
+    @NotEmpty(message = "{name.notempty}")
     private String name;
+    @PastOrPresent(message = "{date.present.or.past.mismatch}")
     private LocalDate birthDate;
+    @NotEmpty(message = "{pettype.notempty}")
     private String petType;
 
     public String getName() {

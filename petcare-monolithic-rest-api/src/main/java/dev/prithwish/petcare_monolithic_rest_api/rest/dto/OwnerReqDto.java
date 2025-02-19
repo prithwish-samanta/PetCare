@@ -1,10 +1,17 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 public class OwnerReqDto {
+    @NotEmpty(message = "{lastname.notempty}")
     private String lastName;
     private String firstName;
+    @NotEmpty(message = "{address.notempty}")
     private String address;
+    @NotEmpty(message = "{city.notempty}")
     private String city;
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{telephone.pattern.mismatch}")
     private String telephone;
 
     public String getLastName() {
