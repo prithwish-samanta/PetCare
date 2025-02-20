@@ -5,6 +5,7 @@ import dev.prithwish.petcare_monolithic_rest_api.rest.dto.PetReqDto;
 import dev.prithwish.petcare_monolithic_rest_api.rest.dto.PetResDto;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class PetMapper {
@@ -29,5 +30,9 @@ public class PetMapper {
             petResDto.setVisits(new HashSet<>());
         }
         return petResDto;
+    }
+
+    public static List<PetResDto> toPetDtoList(List<Pet> pets) {
+        return pets.stream().map(PetMapper::toPetDto).toList();
     }
 }

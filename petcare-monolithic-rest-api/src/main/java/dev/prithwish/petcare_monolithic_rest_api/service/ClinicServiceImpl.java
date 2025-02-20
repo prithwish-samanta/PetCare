@@ -98,4 +98,22 @@ public class ClinicServiceImpl implements ClinicService {
     public void deletePetType(int petTypeId) {
         petTypeRepository.deleteById(petTypeId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pet> findAllPets() {
+        return petRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Pet findPetById(int petId) {
+        return petRepository.findById(petId).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void deletePetById(int petId) {
+        petRepository.deleteById(petId);
+    }
 }

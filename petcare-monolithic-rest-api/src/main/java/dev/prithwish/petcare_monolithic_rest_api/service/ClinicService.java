@@ -31,4 +31,10 @@ public interface ClinicService {
     PetType findPetTypeById(int petTypeId);
 
     void deletePetType(int petTypeId);
+
+    List<Pet> findAllPets();
+
+    Pet findPetById(int petId);
+
+    void deletePetById(int petId);
 }
