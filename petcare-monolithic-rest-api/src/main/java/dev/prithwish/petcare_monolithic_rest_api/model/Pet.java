@@ -11,7 +11,7 @@ public class Pet extends NamedEntity {
     @Column(name = "birth_date", columnDefinition = "DATE")
     private LocalDate birthDate;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "type_id")
     private PetType type;
 

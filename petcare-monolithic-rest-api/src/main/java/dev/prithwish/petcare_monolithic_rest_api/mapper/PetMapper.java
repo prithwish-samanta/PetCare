@@ -20,7 +20,9 @@ public class PetMapper {
         petResDto.setId(pet.getId());
         petResDto.setName(pet.getName());
         petResDto.setBirthDate(pet.getBirthDate());
-        petResDto.setPetType(PetTypeMapper.toPetTypeDto(pet.getType()));
+        if (pet.getType() != null) {
+            petResDto.setPetType(PetTypeMapper.toPetTypeDto(pet.getType()));
+        }
         if (pet.getVisits() != null) {
             petResDto.setVisits(pet.getVisits().stream().map(VisitMapper::toVisitResDto).collect(Collectors.toSet()));
         } else {

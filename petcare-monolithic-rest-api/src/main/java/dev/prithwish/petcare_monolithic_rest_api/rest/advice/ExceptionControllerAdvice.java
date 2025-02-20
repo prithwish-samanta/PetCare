@@ -1,5 +1,6 @@
 package dev.prithwish.petcare_monolithic_rest_api.rest.advice;
 
+import dev.prithwish.petcare_monolithic_rest_api.exception.ResourceAlreadyExistsException;
 import dev.prithwish.petcare_monolithic_rest_api.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -27,15 +28,19 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(ResourceNotFoundException ex,
-                                                                               HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(buildErrorResponse(status, ex.getMessage(), request.getRequestURI()), status);
     }
 
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        return new ResponseEntity<>(buildErrorResponse(status, ex.getMessage(), request.getRequestURI()), status);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
-                                                                                     HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());

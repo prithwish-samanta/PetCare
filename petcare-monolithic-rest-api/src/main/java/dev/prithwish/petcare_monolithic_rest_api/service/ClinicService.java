@@ -23,4 +23,12 @@ public interface ClinicService {
     Visit saveVisit(Visit visit);
 
     PetType findPetTypeByName(String name);
+
+    List<PetType> findAllPetTypes();
+
+    PetType savePetType(PetType petType);
+
+    PetType findPetTypeById(int petTypeId);
+
+    void deletePetType(int petTypeId);
 }

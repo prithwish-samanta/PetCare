@@ -70,7 +70,32 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PetType findPetTypeByName(String name) {
-        return petTypeRepository.findByName(name);
+        return petTypeRepository.findByNameIgnoreCase(name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PetType> findAllPetTypes() {
+        return petTypeRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public PetType savePetType(PetType petType) {
+        return petTypeRepository.save(petType);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PetType findPetTypeById(int petTypeId) {
+        return petTypeRepository.findById(petTypeId).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void deletePetType(int petTypeId) {
+        petTypeRepository.deleteById(petTypeId);
     }
 }

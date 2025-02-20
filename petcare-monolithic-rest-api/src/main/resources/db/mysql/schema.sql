@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS tb_pets
     id         INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(30),
     birth_date DATE,
-    type_id    INT(4) UNSIGNED NOT NULL,
+    type_id    INT(4) UNSIGNED,
     owner_id   INT(4) UNSIGNED,
     INDEX (name),
     FOREIGN KEY (owner_id) REFERENCES tb_owners (id),
-    FOREIGN KEY (type_id) REFERENCES tb_pet_types (id)
+    FOREIGN KEY (type_id) REFERENCES tb_pet_types (id) ON DELETE SET NULL
 ) engine = InnoDB;
 
 CREATE TABLE IF NOT EXISTS tb_specialties
