@@ -33,7 +33,7 @@ CREATE TABLE tb_pets
     owner_id   INTEGER
 );
 ALTER TABLE tb_pets
-    ADD CONSTRAINT fk_pets_owners FOREIGN KEY (owner_id) REFERENCES tb_owners (id);
+    ADD CONSTRAINT fk_pets_owners FOREIGN KEY (owner_id) REFERENCES tb_owners (id) ON DELETE CASCADE;
 ALTER TABLE tb_pets
     ADD CONSTRAINT fk_pets_types FOREIGN KEY (type_id) REFERENCES tb_pet_types (id) ON DELETE SET NULL;
 CREATE INDEX pets_name ON tb_pets (name);
@@ -61,7 +61,7 @@ CREATE TABLE tb_visits
     description VARCHAR(255)
 );
 ALTER TABLE tb_visits
-    ADD CONSTRAINT fk_visits_pets FOREIGN KEY (pet_id) REFERENCES tb_pets (id);
+    ADD CONSTRAINT fk_visits_pets FOREIGN KEY (pet_id) REFERENCES tb_pets (id) ON DELETE CASCADE;
 CREATE INDEX visits_pet_id ON tb_visits (pet_id);
 
 CREATE TABLE tb_vet_specialties

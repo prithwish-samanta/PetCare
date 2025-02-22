@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS tb_pets
     type_id    INT(4) UNSIGNED,
     owner_id   INT(4) UNSIGNED,
     INDEX (name),
-    FOREIGN KEY (owner_id) REFERENCES tb_owners (id),
+    FOREIGN KEY (owner_id) REFERENCES tb_owners (id) ON DELETE CASCADE,
     FOREIGN KEY (type_id) REFERENCES tb_pet_types (id) ON DELETE SET NULL
 ) engine = InnoDB;
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS tb_visits
     pet_id      INT(4) UNSIGNED,
     visit_date  DATE,
     description VARCHAR(255),
-    FOREIGN KEY (pet_id) REFERENCES tb_pets (id)
+    FOREIGN KEY (pet_id) REFERENCES tb_pets (id) ON DELETE CASCADE
 ) engine = InnoDB;
 
 CREATE TABLE IF NOT EXISTS tb_vet_specialties
