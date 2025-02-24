@@ -27,6 +27,11 @@ function OwnerEditor({owner, isNew}: OwnerEditorProps) {
             if (isNew) {
                 const data = await ApiManager.createOwner(formData);
                 setSavedOwner(data);
+            } else {
+                if (owner.id != null) {
+                    const data = await ApiManager.updateOwner(owner.id, formData);
+                    setSavedOwner(data);
+                }
             }
         } catch (err: any) {
             setError(err.message);
@@ -101,7 +106,7 @@ function OwnerEditor({owner, isNew}: OwnerEditorProps) {
                     <label className="form-label" htmlFor="telephone">Telephone</label>
                 </div>
                 <button type="submit" className="btn btn-primary btn-block mb-4">
-                    Create Owner
+                    {isNew ? "Create Owner" : "Update Owner"}
                 </button>
             </form>
         </div>

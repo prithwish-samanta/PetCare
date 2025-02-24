@@ -19,4 +19,9 @@ export class ApiManager {
         const url = BASE_URL + EndPoints.CREATE_OWNER();
         return ApiMethods.post(url, owner);
     }
+
+    static updateOwner = (ownerId: number, owner: IOwner) => {
+        const url = BASE_URL + EndPoints.UPDATE_OWNER(ownerId);
+        return ApiMethods.put(url, owner);
+    }
 }
