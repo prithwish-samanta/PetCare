@@ -3,6 +3,8 @@ import {Route, Routes} from "react-router";
 import WelcomePage from "./components/WelcomePage.tsx";
 import FindOwnersPage from "./components/owners/FindOwnersPage.tsx";
 import Navbar from "./components/layout/Navbar.tsx";
+import NewOwnerPage from "./components/owners/NewOwnerPage.tsx";
+import OwnerInformation from "./components/owners/OwnerInformation.tsx";
 
 function App() {
     return (
@@ -11,6 +13,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<WelcomePage/>}/>
                 <Route path="/owners/list" element={<FindOwnersPage/>}/>
+                <Route path="/owners/new" element={<NewOwnerPage/>}/>
+                <Route path="owners/:ownerId" element={<OwnerInformation/>}/>
             </Routes>
         </>
     )

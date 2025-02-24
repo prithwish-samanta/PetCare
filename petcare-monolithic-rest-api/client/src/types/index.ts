@@ -1,5 +1,5 @@
 interface IBaseEntity {
-    id: number;
+    id: number | null;
 }
 
 interface INamedEntity extends IBaseEntity {
