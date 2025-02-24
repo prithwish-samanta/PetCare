@@ -1,11 +1,30 @@
-import {LIST_OF_OWNERS} from "../../data";
-import {IOwner} from "../../types";
 import OwnersTable from "./OwnersTable.tsx";
 import {Link} from "react-router";
-
-const owners: IOwner[] = LIST_OF_OWNERS;
+import {useState} from "react";
+import {IOwner} from "../../types";
+import {ApiManager} from "../../api-manager/ApiManager.ts";
 
 function FindOwnersPage() {
+    const [owners, setOwners] = useState<IOwner[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchOwners = async (lastName: string) => {
+        setError(null);
+        setOwners([]);
+
+        try {
+            const data = await ApiManager.getOwners(lastName);
+            setOwners(data);
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    const handleSearch = () => {
+        fetchOwners(searchTerm);
+    };
+
     return (
         <section className="container">
             <div className="my-3">
@@ -14,20 +33,26 @@ function FindOwnersPage() {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Owner's lastname"
-                        aria-label="Owner's lastname"
-                        aria-describedby="button-addon2"
+                        placeholder="Owner's last name"
+                        aria-label="Owner's last name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <button className="btn btn-primary" type="button" id="button-addon2"
-                            data-mdb-ripple-color="dark">
-                        Button
+                    <button
+                        className="btn btn-primary"
+                        type="button"
+                        id="button-addon2"
+                        onClick={handleSearch}
+                    >
+                        Search
                     </button>
                 </div>
-                <OwnersTable owners={owners}/>
-                <Link className='btn btn-primary' to='/owners/new'> Add Owner</Link>
+                {error && <p className="alert alert-danger text-center">{error}</p>}
+                {owners.length > 0 && <OwnersTable owners={owners}/>}
+                <Link className="btn btn-primary" to="/owners/new">Add Owner</Link>
             </div>
         </section>
-    )
+    );
 }
 
 export default FindOwnersPage;
