@@ -24,4 +24,9 @@ export class ApiManager {
         const url = BASE_URL + EndPoints.UPDATE_OWNER(ownerId);
         return ApiMethods.put(url, owner);
     }
+
+    static invokeApiError = () => {
+        const url = BASE_URL + EndPoints.ERROR();
+        return ApiMethods.get(url);
+    }
 }
