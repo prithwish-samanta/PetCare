@@ -24,6 +24,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/owners")
+@CrossOrigin(origins = "*")
 public class OwnerRestController {
     private final ClinicService clinicService;
     private final MessageSource messageSource;
