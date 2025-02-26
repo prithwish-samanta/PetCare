@@ -7,6 +7,7 @@ import NewOwnerPage from "./components/owners/NewOwnerPage.tsx";
 import EditOwnerPage from "./components/owners/EditOwnerPage.tsx";
 import ErrorPage from "./components/ErrorPage.tsx";
 import OwnersPage from "./components/owners/OwnersPage.tsx";
+import NotFoundPage from "./components/NotFoundPage.tsx";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="owners/:ownerId" element={<OwnersPage/>}/>
                 <Route path="/owners/:ownerId/edit" element={<EditOwnerPage/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
+                <Route path="*" element={<NotFoundPage/>}/>
             </Routes>
         </>
     )
