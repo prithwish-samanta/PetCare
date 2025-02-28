@@ -25,6 +25,11 @@ export class ApiManager {
         return ApiMethods.put(url, owner);
     }
 
+    static getVets = () => {
+        const url = BASE_URL + EndPoints.LIST_OF_VETS();
+        return ApiMethods.get(url);
+    }
+
     static invokeApiError = () => {
         const url = BASE_URL + EndPoints.ERROR();
         return ApiMethods.get(url);

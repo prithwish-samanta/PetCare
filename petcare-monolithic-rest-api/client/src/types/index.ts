@@ -31,3 +31,10 @@ export interface IOwner extends IPerson {
     telephone: string;
     pets: IPet[];
 }
+
+export interface ISpecialty extends INamedEntity {
+}
+
+export interface IVet extends IPerson {
+    specialties: ISpecialty[];
+}

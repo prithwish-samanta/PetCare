@@ -3,5 +3,6 @@ export const EndPoints = {
     GET_OWNER_BY_ID: (ownerId: number) => `/owners/${ownerId}`,
     CREATE_OWNER: () => "/owners",
     UPDATE_OWNER: (ownerId: number) => `/owners/${ownerId}`,
+    LIST_OF_VETS: () => "/vets",
     ERROR: () => "/oops"
 }
