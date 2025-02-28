@@ -26,6 +26,9 @@ function Navbar() {
             <div className="collapse navbar-collapse" id="navbarButtonsExample">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
+                        <NavLink className="nav-link text-uppercase" to="/">Home</NavLink>
+                    </li>
+                    <li className="nav-item">
                         <NavLink className="nav-link text-uppercase" to="/owners/list">Find owners</NavLink>
                     </li>
                     <li className="nav-item">
