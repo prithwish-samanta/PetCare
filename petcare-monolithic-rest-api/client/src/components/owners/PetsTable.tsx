@@ -37,9 +37,9 @@ function PetsTable({ownerId, pets}: PetInfoProps) {
                             </td>}
                         <td>
                             <Link to={`/owners/${ownerId}/pets/${pet.id}/edit`} className='btn btn-primary me-1'>Edit
-                                Owner</Link>
+                                Pet</Link>
                             <Link to={`/owners/${ownerId}/pets/${pet.id}/visits/new`} className='btn btn-primary'>Add
-                                New Pet</Link>
+                                Visit</Link>
                         </td>
                     </tr>
                 ))}
