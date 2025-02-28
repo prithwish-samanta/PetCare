@@ -1,13 +1,7 @@
 package dev.prithwish.petcare_monolithic_rest_api.service;
 
-import dev.prithwish.petcare_monolithic_rest_api.model.Owner;
-import dev.prithwish.petcare_monolithic_rest_api.model.Pet;
-import dev.prithwish.petcare_monolithic_rest_api.model.PetType;
-import dev.prithwish.petcare_monolithic_rest_api.model.Visit;
-import dev.prithwish.petcare_monolithic_rest_api.repository.OwnerRepository;
-import dev.prithwish.petcare_monolithic_rest_api.repository.PetRepository;
-import dev.prithwish.petcare_monolithic_rest_api.repository.PetTypeRepository;
-import dev.prithwish.petcare_monolithic_rest_api.repository.VisitRepository;
+import dev.prithwish.petcare_monolithic_rest_api.model.*;
+import dev.prithwish.petcare_monolithic_rest_api.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +13,14 @@ public class ClinicServiceImpl implements ClinicService {
     private final PetRepository petRepository;
     private final VisitRepository visitRepository;
     private final PetTypeRepository petTypeRepository;
+    private final VetRepository vetRepository;
 
-    public ClinicServiceImpl(OwnerRepository ownerRepository, PetRepository petRepository, VisitRepository visitRepository, PetTypeRepository petTypeRepository) {
+    public ClinicServiceImpl(OwnerRepository ownerRepository, PetRepository petRepository, VisitRepository visitRepository, PetTypeRepository petTypeRepository, VetRepository vetRepository) {
         this.ownerRepository = ownerRepository;
         this.petRepository = petRepository;
         this.visitRepository = visitRepository;
         this.petTypeRepository = petTypeRepository;
+        this.vetRepository = vetRepository;
     }
 
     @Override
@@ -115,5 +111,10 @@ public class ClinicServiceImpl implements ClinicService {
     @Transactional
     public void deletePetById(int petId) {
         petRepository.deleteById(petId);
+    }
+
+    @Override
+    public List<Vet> findAllVets() {
+        return vetRepository.findAll();
     }
 }
