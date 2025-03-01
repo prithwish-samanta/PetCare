@@ -28,27 +28,29 @@ function FindOwnersPage() {
     return (
         <section className="container my-3">
             <h2 className="text-center mb-3">Find Owners</h2>
-            <div className="input-group input-group-lg mb-3">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Owner's last name"
-                    aria-label="Owner's last name"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button
-                    className="btn btn-primary"
-                    type="button"
-                    id="button-addon2"
-                    onClick={handleSearch}
-                >
-                    Search
-                </button>
-            </div>
+            {
+                owners.length == 0 && <div className="input-group input-group-lg mb-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Owner's last name"
+                        aria-label="Owner's last name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button
+                        className="btn btn-primary"
+                        type="button"
+                        id="button-addon2"
+                        onClick={handleSearch}
+                    >
+                        Search
+                    </button>
+                </div>
+            }
             {error && <p className="alert alert-danger text-center">{error}</p>}
             {owners.length > 0 && <OwnersTable owners={owners}/>}
-            <Link className="btn btn-primary" to="/owners/new">Add Owner</Link>
+            {owners.length == 0 && <Link className="btn btn-primary" to="/owners/new">Add Owner</Link>}
         </section>
     );
 }
