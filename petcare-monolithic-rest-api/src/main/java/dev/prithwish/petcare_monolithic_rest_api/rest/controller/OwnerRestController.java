@@ -133,28 +133,16 @@ public class OwnerRestController {
     // Get a pet by ID
     @GetMapping("/{ownerId}/pets/{petId}")
     public ResponseEntity<PetResDto> getOwnersPet(@PathVariable int ownerId, @PathVariable int petId) {
-        Owner owner = clinicService.findOwnerById(ownerId);
-        if (owner == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
-        }
-        Pet res = owner.getPet(petId);
-        if (res == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
-        }
+        Owner owner = fetchOwnerById(ownerId);
+        Pet res = fetchPet(owner, petId);
         return new ResponseEntity<>(PetMapper.toPetDto(res), HttpStatus.OK);
     }
 
     // Update a pet's details
     @PutMapping("/{ownerId}/pets/{petId}")
     public ResponseEntity<String> updateOwnersPet(@PathVariable int ownerId, @PathVariable int petId, @RequestBody @Valid PetReqDto pet) {
-        Owner owner = clinicService.findOwnerById(ownerId);
-        if (owner == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
-        }
-        Pet dbPet = owner.getPet(petId);
-        if (dbPet == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
-        }
+        Owner owner = fetchOwnerById(ownerId);
+        Pet dbPet = fetchPet(owner, petId);
         if (StringUtils.hasText(pet.getName())) {
             dbPet.setName(pet.getName());
         }
@@ -175,17 +163,27 @@ public class OwnerRestController {
     // Adds a vet visit
     @PostMapping("/{ownerId}/pets/{petId}/visits")
     public ResponseEntity<VisitResDto> addVisitToOwner(@PathVariable int ownerId, @PathVariable int petId, @RequestBody @Valid VisitReqDto visit) {
-        Owner owner = clinicService.findOwnerById(ownerId);
-        if (owner == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
-        }
-        Pet pet = owner.getPet(petId);
-        if (pet == null) {
-            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
-        }
+        Owner owner = fetchOwnerById(ownerId);
+        Pet pet = fetchPet(owner, petId);
         Visit req = VisitMapper.toVisit(visit);
         req.setPet(pet);
         Visit savedVisit = clinicService.saveVisit(req);
         return new ResponseEntity<>(VisitMapper.toVisitResDto(savedVisit), HttpStatus.CREATED);
+    }
+
+    private Owner fetchOwnerById(int ownerId) {
+        Owner owner = clinicService.findOwnerById(ownerId);
+        if (owner == null) {
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
+        }
+        return owner;
+    }
+
+    private Pet fetchPet(Owner owner, int petId) {
+        Pet pet = owner.getPet(petId);
+        if (pet == null) {
+            throw new ResourceNotFoundException(messageSource.getMessage("api.error.pet.not.found", null, Locale.ENGLISH));
+        }
+        return pet;
     }
 }

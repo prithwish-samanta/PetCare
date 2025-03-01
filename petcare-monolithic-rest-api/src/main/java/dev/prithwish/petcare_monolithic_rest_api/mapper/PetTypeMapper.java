@@ -13,12 +13,6 @@ public class PetTypeMapper {
         return petTypeDto;
     }
 
-    public static PetType toPetType(PetTypeDto petTypeDto) {
-        PetType petType = new PetType();
-        petType.setName(petTypeDto.getName());
-        return petType;
-    }
-
     public static List<PetTypeDto> toPetTypeDtoList(List<PetType> petTypes) {
         return petTypes.stream().map(PetTypeMapper::toPetTypeDto).toList();
     }

@@ -23,17 +23,7 @@ public interface ClinicService {
 
     List<PetType> findAllPetTypes();
 
-    PetType savePetType(PetType petType);
-
     PetType findPetTypeById(int petTypeId);
-
-    void deletePetType(int petTypeId);
-
-    List<Pet> findAllPets();
-
-    Pet findPetById(int petId);
-
-    void deletePetById(int petId);
 
     List<Vet> findAllVets();
 }
