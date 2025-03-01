@@ -10,6 +10,7 @@ import dev.prithwish.petcare_monolithic_rest_api.model.PetType;
 import dev.prithwish.petcare_monolithic_rest_api.model.Visit;
 import dev.prithwish.petcare_monolithic_rest_api.rest.dto.*;
 import dev.prithwish.petcare_monolithic_rest_api.service.ClinicService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/owners")
 @CrossOrigin(origins = "*")
+@Tag(name = "owner", description = "Endpoints related to pet owners.")
 public class OwnerRestController {
     private final ClinicService clinicService;
     private final MessageSource messageSource;
@@ -53,7 +55,7 @@ public class OwnerRestController {
         } else {
             owners = clinicService.findAllOwners();
         }
-        if (owners.isEmpty()) {
+        if (owners == null || owners.isEmpty()) {
             throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.list.empty", null, Locale.ENGLISH));
         }
         List<OwnerResDto> res = owners.stream().map(OwnerMapper::toOwnerDto).toList();
