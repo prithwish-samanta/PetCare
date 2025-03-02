@@ -8,26 +8,24 @@ import dev.prithwish.petcare_monolithic_rest_api.model.Owner;
 import dev.prithwish.petcare_monolithic_rest_api.model.Pet;
 import dev.prithwish.petcare_monolithic_rest_api.model.PetType;
 import dev.prithwish.petcare_monolithic_rest_api.model.Visit;
+import dev.prithwish.petcare_monolithic_rest_api.rest.api.OwnersApi;
 import dev.prithwish.petcare_monolithic_rest_api.rest.dto.*;
 import dev.prithwish.petcare_monolithic_rest_api.service.ClinicService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/owners")
 @CrossOrigin(origins = "*")
-@Tag(name = "owner", description = "Endpoints related to pet owners.")
-public class OwnerRestController {
+public class OwnerRestController implements OwnersApi {
     private final ClinicService clinicService;
     private final MessageSource messageSource;
 
@@ -36,9 +34,8 @@ public class OwnerRestController {
         this.messageSource = messageSource;
     }
 
-    // Adds a pet owner
-    @PostMapping
-    public ResponseEntity<OwnerResDto> addOwner(@RequestBody @Valid OwnerReqDto owner) {
+    @Override
+    public ResponseEntity<OwnerResDto> addOwner(OwnerReqDto owner) {
         Owner req = OwnerMapper.toOwner(owner);
         OwnerResDto dto = OwnerMapper.toOwnerDto(clinicService.saveOwner(req));
         HttpHeaders headers = new HttpHeaders();
@@ -46,9 +43,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(dto, headers, HttpStatus.CREATED);
     }
 
-    // Lists pet owners
-    @GetMapping
-    public ResponseEntity<List<OwnerResDto>> listOwners(@RequestParam(required = false) String lastName) {
+    @Override
+    public ResponseEntity<List<OwnerResDto>> listOwners(String lastName) {
         List<Owner> owners;
         if (lastName != null) {
             owners = clinicService.findOwnerByLastName(lastName);
@@ -62,9 +58,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    // Get a pet owner by ID
-    @GetMapping("/{ownerId}")
-    public ResponseEntity<OwnerResDto> getOwner(@PathVariable int ownerId) {
+    @Override
+    public ResponseEntity<OwnerResDto> getOwner(int ownerId) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
             throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
@@ -73,9 +68,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    // Update a pet owner's details
-    @PutMapping("/{ownerId}")
-    public ResponseEntity<OwnerResDto> updateOwner(@RequestBody @Valid OwnerReqDto owner, @PathVariable int ownerId) {
+    @Override
+    public ResponseEntity<OwnerResDto> updateOwner(OwnerReqDto owner, int ownerId) {
         Owner dbOwner = clinicService.findOwnerById(ownerId);
         if (dbOwner == null) {
             throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
@@ -99,9 +93,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(OwnerMapper.toOwnerDto(savedOwner), HttpStatus.OK);
     }
 
-    // Delete an owner by ID
-    @DeleteMapping("/{ownerId}")
-    public ResponseEntity<Void> deleteOwner(@PathVariable int ownerId) {
+    @Override
+    public ResponseEntity<Void> deleteOwner(int ownerId) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
             throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
@@ -110,9 +103,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Adds a pet to an owner
-    @PostMapping("/{ownerId}/pets")
-    public ResponseEntity<PetResDto> addPetToOwner(@PathVariable int ownerId, @RequestBody @Valid PetReqDto pet) {
+    @Override
+    public ResponseEntity<PetResDto> addPetToOwner(int ownerId, PetReqDto pet) {
         Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
             throw new ResourceNotFoundException(messageSource.getMessage("api.error.owner.not.found", null, Locale.ENGLISH));
@@ -132,17 +124,15 @@ public class OwnerRestController {
         return new ResponseEntity<>(PetMapper.toPetDto(savedPet), headers, HttpStatus.CREATED);
     }
 
-    // Get a pet by ID
-    @GetMapping("/{ownerId}/pets/{petId}")
-    public ResponseEntity<PetResDto> getOwnersPet(@PathVariable int ownerId, @PathVariable int petId) {
+    @Override
+    public ResponseEntity<PetResDto> getOwnersPet(int ownerId, int petId) {
         Owner owner = fetchOwnerById(ownerId);
         Pet res = fetchPet(owner, petId);
         return new ResponseEntity<>(PetMapper.toPetDto(res), HttpStatus.OK);
     }
 
-    // Update a pet's details
-    @PutMapping("/{ownerId}/pets/{petId}")
-    public ResponseEntity<String> updateOwnersPet(@PathVariable int ownerId, @PathVariable int petId, @RequestBody @Valid PetReqDto pet) {
+    @Override
+    public ResponseEntity<String> updateOwnersPet(int ownerId, int petId, PetReqDto pet) {
         Owner owner = fetchOwnerById(ownerId);
         Pet dbPet = fetchPet(owner, petId);
         if (StringUtils.hasText(pet.getName())) {
@@ -162,9 +152,8 @@ public class OwnerRestController {
         return new ResponseEntity<>(messageSource.getMessage("api.response.pet.update.successful", null, Locale.ENGLISH), HttpStatus.OK);
     }
 
-    // Adds a vet visit
-    @PostMapping("/{ownerId}/pets/{petId}/visits")
-    public ResponseEntity<VisitResDto> addVisitToOwner(@PathVariable int ownerId, @PathVariable int petId, @RequestBody @Valid VisitReqDto visit) {
+    @Override
+    public ResponseEntity<VisitResDto> addVisitToOwner(int ownerId, int petId, VisitReqDto visit) {
         Owner owner = fetchOwnerById(ownerId);
         Pet pet = fetchPet(owner, petId);
         Visit req = VisitMapper.toVisit(visit);
